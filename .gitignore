@@ -1,4 +1,4 @@
 *.swp
-
+bin/
 lib/
 build/
