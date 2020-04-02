@@ -6,16 +6,18 @@
 namespace utopia {
 /**
  * Most versatile string type for handling utf-8 strings.
- * O(1) complexity for index operations. Use this string unless
- * you have a good reason to use other strings.
+ * O(1) time complexity for index operations. Should be your goto
+ * string in this library.
  */
 class UString {
-	public:
 
-	private:
-		Buffer<uint32_t, 2> mBuffer;
+public:
+private:
+	uint8_t charSize;
+  Buffer<uint32_t, 2> mBuffer;
+
 };
-}
 
+} // namespace utopia
 
 #endif
