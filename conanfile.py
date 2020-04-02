@@ -14,6 +14,7 @@ class UtopiaConan(ConanFile):
     default_options = {"shared": False}
     generators = "cmake"
     exports_sources = "src/*", "include/utopia/*"
+    requires = "Catch2/2.11.1@catchorg/stable"
 
     def build(self):
         cmake = CMake(self)

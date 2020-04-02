@@ -21,15 +21,15 @@ include(cmake/CompilerWarnings.cmake)
 set_project_warnings(project_warnings)
 
 # conan stuff
-set(CONAN_REQUIRED_PACKAGES "")
 set(CONAN_EXTRA_OPTIONS "")
 include(cmake/Conan.cmake)
 run_conan()
 
 # enabling tests
+option(ENABLE_TESTS "Build tests" ON)
 if(ENABLE_TESTS)
   message("Tests enabled. Building tests")
-  add_subdirectory(test)
+  add_subdirectory(tests)
 else()
   message("Tests disabled")
 endif()

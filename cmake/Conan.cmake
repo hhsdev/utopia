@@ -16,7 +16,7 @@ macro(run_conan)
   endif()
 
   include(${CMAKE_BINARY_DIR}/conan.cmake)
-  option(CONAN_LOCAL_SERVER "Add local conan server to remote list" ENABLED)
+  option(CONAN_LOCAL_SERVER "Add local conan server to remote list" OFF)
 
   if(${CONAN_LOCAL_SERVER})
     conan_add_remote(NAME local_server INDEX 0 URL http://localhost:9300)
@@ -30,6 +30,7 @@ macro(run_conan)
     OPTIONS
     ${CONAN_EXTRA_OPTIONS}
     BASIC_SETUP
+    NO_OUTPUT_DIRS
     CMAKE_TARGETS # individual targets to link to
     BUILD
     missing)
