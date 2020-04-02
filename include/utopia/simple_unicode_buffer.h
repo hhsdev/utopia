@@ -7,15 +7,17 @@ namespace utopia {
 class SimpleUnicodeBuffer : public UnicodeBufferInterface<SimpleUnicodeBuffer> {
  public:
   SimpleUnicodeBuffer() = default;
-  SimpleUnicodeBuffer(size_t size) : mBuffer(new uint32_t[size]()), mSize(size) {}
+  SimpleUnicodeBuffer(size_t size)
+      : mBuffer(new uint32_t[size]()), mSize(size) {}
 
-  uint32_t get(size_t) const { return 0; }
-  void set(size_t, uint32_t) {}
-	
-	size_t size() const { return mSize; }
+  uint32_t get(size_t index) const { return mBuffer[index]; }
+  void set(size_t index, uint32_t value) { mBuffer[index] = value; }
+
+  size_t size() const { return mSize; }
+
  private:
   uint32_t* mBuffer;
-	size_t mSize;
+  size_t mSize;
 };
 }  // namespace utopia
 #endif
