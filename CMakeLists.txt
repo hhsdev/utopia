@@ -32,6 +32,9 @@ set(CONAN_EXTRA_OPTIONS "")
 include(cmake/Conan.cmake)
 run_conan()
 
+# exports compile_commands.json to be used by linters
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # enabling tests
 option(ENABLE_TESTS "Build tests" ON)
 if(ENABLE_TESTS)

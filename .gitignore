@@ -2,3 +2,4 @@
 bin/
 lib/
 build/
+compile_commands.json
