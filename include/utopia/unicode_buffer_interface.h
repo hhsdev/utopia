@@ -9,8 +9,9 @@ namespace utopia {
 // required by the interface.
 template <typename UnicodeBufferImpl>
 class UnicodeBufferInterface {
-  GENERATE_FUNCTION_PRESENCE_TEST(get, uint32_t(size_t))
-  GENERATE_FUNCTION_PRESENCE_TEST(set, void(size_t, uint32_t))
+  GENERATE_FUNCTION_PRESENCE_TEST(has_get, get, uint32_t(size_t))
+  GENERATE_FUNCTION_PRESENCE_TEST(has_set, set, void(size_t, uint32_t))
+	GENERATE_FUNCTION_PRESENCE_TEST(has_operator, operator[], uint32_t(size_t))
 
  public:
   UnicodeBufferInterface() {
@@ -21,6 +22,11 @@ class UnicodeBufferInterface {
     static_assert(has_set<UnicodeBufferImpl>::value,
                   "UnicodeBuffer Implementations must implement method "
                   "`uint32_t set(size_t, uint32_t)`");
+
+		//TODO: think about whether to add checks for mutable index operators
+    static_assert(
+        has_operator<const UnicodeBufferImpl>::value,
+        "UnicodeBuffer Implementations must implement index operators");
   }
 };
 
