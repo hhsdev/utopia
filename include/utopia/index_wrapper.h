@@ -1,8 +1,13 @@
 #ifndef UTOPIA_INDEX_WRAPPER_H
 #define UTOPIA_INDEX_WRAPPER_H
+
+#include <cstdint>
+#include "hhs/has_member_function.h"
+
 namespace utopia {
 template <typename Container>
 class IndexWrapper {
+  using size_t = std::size_t;
   GENERATE_FUNCTION_PRESENCE_TEST(has_get, get, uint32_t(size_t))
   GENERATE_FUNCTION_PRESENCE_TEST(has_set, set, void(size_t, uint32_t))
  public:
