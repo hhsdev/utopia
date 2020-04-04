@@ -1,6 +1,7 @@
 add_executable(
   unit_test
   ${PROJECT_SOURCE_DIR}/tests/catch_main.cpp
+  ${PROJECT_SOURCE_DIR}/src/simple_unicode_buffer.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/simple_unicode_buffer.test.cpp)
 
 target_link_libraries(unit_test PRIVATE project_options project_warnings)

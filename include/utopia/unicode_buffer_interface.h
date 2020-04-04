@@ -2,6 +2,7 @@
 #define UTOPIA_BUFFER_INTERFACE_H
 
 #include "hhs/has_member_function.h"
+#include <cstdint>
 
 namespace utopia {
 // This is a compile-time interface. It's actually just a bunch of
@@ -9,9 +10,9 @@ namespace utopia {
 // required by the interface.
 template <typename UnicodeBufferImpl>
 class UnicodeBufferInterface {
-  GENERATE_FUNCTION_PRESENCE_TEST(has_get, get, uint32_t(size_t))
-  GENERATE_FUNCTION_PRESENCE_TEST(has_set, set, void(size_t, uint32_t))
-	GENERATE_FUNCTION_PRESENCE_TEST(has_operator, operator[], uint32_t(size_t))
+  GENERATE_FUNCTION_PRESENCE_TEST(has_get, get, uint32_t(std::size_t))
+  GENERATE_FUNCTION_PRESENCE_TEST(has_set, set, void(std::size_t, uint32_t))
+	GENERATE_FUNCTION_PRESENCE_TEST(has_operator, operator[], uint32_t(std::size_t))
 
  public:
   UnicodeBufferInterface() {
