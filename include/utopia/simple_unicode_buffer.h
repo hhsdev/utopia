@@ -21,14 +21,27 @@ class SimpleUnicodeBuffer : public UnicodeBufferInterface<SimpleUnicodeBuffer> {
     mSize = mCapacity = size;
   }
 
-  uint32_t operator[](size_t index) const { return mBuffer[index]; }
+  uint32_t operator[](size_t index) const {
+    if (index >= mSize) {
+      throw std::out_of_range("Index out of range");
+    }
+    return mBuffer[index];
+  }
 
   auto operator[](size_t index) {
+    if (index >= mSize) {
+      throw std::out_of_range("Index out of range");
+    }
     return IndexWrapper<SimpleUnicodeBuffer>(*this, index);
   }
 
-  uint32_t get(size_t index) const { return mBuffer[index]; }
-  void set(size_t index, uint32_t value) { mBuffer[index] = value; }
+  uint32_t get(size_t index) const noexcept {
+    return mBuffer[index];
+  }
+
+  void set(size_t index, uint32_t value) noexcept {
+    mBuffer[index] = value;
+  }
 
   size_t size() const { return mSize; }
 
@@ -44,6 +57,11 @@ class SimpleUnicodeBuffer : public UnicodeBufferInterface<SimpleUnicodeBuffer> {
     }
     AllocatorTraits::construct(mAllocator, mBuffer + mSize, value);
     ++mSize;
+  }
+  
+  void pop_back(const uint32_t value) {
+    // TODO: give back memory
+    --mSize;
   }
 
   ~SimpleUnicodeBuffer() {
