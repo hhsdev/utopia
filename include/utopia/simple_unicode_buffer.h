@@ -18,6 +18,8 @@ class SimpleUnicodeBuffer : public UnicodeBufferInterface<SimpleUnicodeBuffer> {
 
   uint32_t operator[](size_t index) const;
   IndexWrapper<SimpleUnicodeBuffer> operator[](size_t index);
+  
+  void remove(size_t index) const noexcept;
 
   uint32_t get(size_t index) const noexcept;
   void set(size_t index, uint32_t value) noexcept;
@@ -25,7 +27,7 @@ class SimpleUnicodeBuffer : public UnicodeBufferInterface<SimpleUnicodeBuffer> {
   constexpr size_t size() const { return mSize; }
 
   void push_back(const uint32_t value);
-  void pop_back(const uint32_t value);
+  void pop_back();
 
   ~SimpleUnicodeBuffer();
 

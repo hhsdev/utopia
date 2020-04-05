@@ -37,6 +37,20 @@ TEST_CASE("push_back works", TAG) {
   }
 }
 
+TEST_CASE("pop_back works", TAG) {
+  SimpleUnicodeBuffer buffer;
+
+  for (unsigned i = 0; i < 100; ++i) {
+    buffer.push_back(i);
+  }
+  auto size = buffer.size();
+  for (unsigned i = 0; i < 100; ++i) {
+    buffer.pop_back();
+    --size;
+    REQUIRE(buffer.size() == size);
+  }
+
+}
 #ifdef CATCH_CONFIG_ENABLE_BENCHMARKING
 
 void pushBack() {

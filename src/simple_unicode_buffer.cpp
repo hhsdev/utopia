@@ -53,14 +53,20 @@ void SimpleUnicodeBuffer::push_back(const uint32_t value) {
   ++mSize;
 }
 
-void SimpleUnicodeBuffer::pop_back(const uint32_t value) {
-  // TODO: give back memory
+void SimpleUnicodeBuffer::pop_back() {
+  AllocatorTraits::destroy(mAllocator, mBuffer + mSize - 1);
   --mSize;
 }
 
 SimpleUnicodeBuffer::~SimpleUnicodeBuffer() {
   AllocatorTraits::destroy(mAllocator, mBuffer);
   AllocatorTraits::deallocate(mAllocator, mBuffer, mCapacity);
+}
+
+void SimpleUnicodeBuffer::remove(size_t index) const noexcept {
+  auto ptrToRemove = mBuffer + index;
+  std::copy(ptrToRemove + 1, mBuffer + size, ptrToRemove);
+  this->pop_back();
 }
 
 }  // namespace utopia
