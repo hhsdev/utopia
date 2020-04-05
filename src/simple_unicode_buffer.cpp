@@ -1,5 +1,5 @@
 #include "utopia/simple_unicode_buffer.h"
-#include <cstring>
+#include <algorithm>
 #include <type_traits>
 
 namespace utopia {
@@ -16,6 +16,18 @@ SimpleUnicodeBuffer::SimpleUnicodeBuffer(
     std::initializer_list<uint32_t> iniList) {
   mBuffer = AllocatorTraits::allocate(mAllocator, iniList.size());
   std::uninitialized_copy(std::begin(iniList), std::end(iniList), mBuffer);
+}
+
+SimpleUnicodeBuffer::SimpleUnicodeBuffer(const SimpleUnicodeBuffer& other)
+    : mBuffer(nullptr), mCapacity(other.mCapacity), mSize(other.mSize) {
+  mBuffer = AllocatorTraits::allocate(mAllocator, mCapacity);
+  std::uninitialized_copy(other.mBuffer, other.mBuffer + mSize, mBuffer);
+}
+
+SimpleUnicodeBuffer::SimpleUnicodeBuffer(SimpleUnicodeBuffer&& other)
+    : mBuffer(nullptr), mCapacity(other.mCapacity), mSize(other.mSize) {
+  mBuffer = other.mBuffer;
+  other.mBuffer = nullptr;
 }
 
 uint32_t SimpleUnicodeBuffer::operator[](size_t index) const {
@@ -43,7 +55,8 @@ void SimpleUnicodeBuffer::set(size_t index, uint32_t value) noexcept {
 
 void SimpleUnicodeBuffer::push_back(const uint32_t value) {
   if (mSize == mCapacity) {
-    if (mCapacity == 0) mCapacity = 1;
+    if (mCapacity == 0)
+      mCapacity = 1;
     mCapacity *= 2;
     auto newBuffer = AllocatorTraits::allocate(mAllocator, mCapacity);
     std::uninitialized_copy(mBuffer, mBuffer + mSize, newBuffer);
@@ -63,10 +76,19 @@ SimpleUnicodeBuffer::~SimpleUnicodeBuffer() {
   AllocatorTraits::deallocate(mAllocator, mBuffer, mCapacity);
 }
 
-void SimpleUnicodeBuffer::remove(size_t index) const noexcept {
+void SimpleUnicodeBuffer::remove(size_t index) noexcept {
   auto ptrToRemove = mBuffer + index;
-  std::copy(ptrToRemove + 1, mBuffer + size, ptrToRemove);
+  std::copy(ptrToRemove + 1, mBuffer + mSize, ptrToRemove);
   this->pop_back();
+}
+
+void SimpleUnicodeBuffer::insert(size_t index, uint32_t value) {
+  this->push_back(0);
+  const auto placeToInsert = mBuffer + index;
+  const auto end = mBuffer + mSize;
+
+  std::copy_backward(placeToInsert, end - 2, end - 1);
+  mBuffer[index] = value;
 }
 
 }  // namespace utopia

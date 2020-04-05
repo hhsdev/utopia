@@ -3,6 +3,15 @@
 
 using namespace utopia;
 constexpr char const* TAG = "[SimpleUnicodeBuffer]";
+
+SimpleUnicodeBuffer createWithPushBack(size_t size) {
+  SimpleUnicodeBuffer buffer;
+  for (unsigned i = 0; i < size; ++i) {
+    buffer.push_back(i);
+  }
+  return buffer;
+}
+
 TEST_CASE("constructors work", TAG) {
   SimpleUnicodeBuffer buffer(10);
   REQUIRE(buffer.size() == 10);
@@ -26,11 +35,7 @@ TEST_CASE("index operator works", TAG) {
 }
 
 TEST_CASE("push_back works", TAG) {
-  SimpleUnicodeBuffer buffer;
-
-  for (unsigned i = 0; i < 100; ++i) {
-    buffer.push_back(i);
-  }
+  SimpleUnicodeBuffer buffer = createWithPushBack(100);
 
   for (unsigned i = 0; i < 100; ++i) {
     REQUIRE(buffer[i] == i);
@@ -38,30 +43,50 @@ TEST_CASE("push_back works", TAG) {
 }
 
 TEST_CASE("pop_back works", TAG) {
-  SimpleUnicodeBuffer buffer;
+  SimpleUnicodeBuffer buffer = createWithPushBack(100);
 
-  for (unsigned i = 0; i < 100; ++i) {
-    buffer.push_back(i);
-  }
   auto size = buffer.size();
   for (unsigned i = 0; i < 100; ++i) {
     buffer.pop_back();
     --size;
     REQUIRE(buffer.size() == size);
   }
+}
 
+TEST_CASE("remove works", TAG) {
+  SimpleUnicodeBuffer buffer = createWithPushBack(10);
+
+  buffer.remove(2);
+  REQUIRE(buffer.size() == 9);
+  REQUIRE(buffer[0] == 0);
+  REQUIRE(buffer[1] == 1);
+  REQUIRE(buffer[2] == 3);
+  REQUIRE(buffer[3] == 4);
+
+  buffer.remove(0);
+  REQUIRE(buffer.size() == 8);
+  REQUIRE(buffer[0] == 1);
+  REQUIRE(buffer[1] == 3);
+  REQUIRE(buffer[2] == 4);
+}
+
+TEST_CASE("Insert works", TAG) {
+  SimpleUnicodeBuffer buffer = createWithPushBack(5);
+
+  buffer.insert(1, 0xdeadbeef);
+  REQUIRE(buffer[0] == 0);
+  REQUIRE(buffer[1] == 0xdeadbeef);
+  REQUIRE(buffer[2] == 1);
+
+  buffer.insert(0, 0xcafebabe);
+  REQUIRE(buffer[0] == 0xcafebabe);
+  REQUIRE(buffer[1] == 0);
+  REQUIRE(buffer[2] == 0xdeadbeef);
+  REQUIRE(buffer[3] == 1);
 }
 #ifdef CATCH_CONFIG_ENABLE_BENCHMARKING
 
-void pushBack() {
-  SimpleUnicodeBuffer buffer;
-  for (unsigned i = 0; i < 1000; ++i) {
-    buffer.push_back(i);
-  }
-}
-
 TEST_CASE("Benchmarking", TAG) {
-  SimpleUnicodeBuffer buffer1, buffer2;
-  BENCHMARK("push_back") { return pushBack(); };
+  BENCHMARK("push_back") { return createWithPushBack(1000); };
 }
 #endif
