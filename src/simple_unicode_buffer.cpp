@@ -1,4 +1,5 @@
 #include "utopia/simple_unicode_buffer.h"
+#include <cstring>
 #include <type_traits>
 
 namespace utopia {
@@ -9,6 +10,12 @@ SimpleUnicodeBuffer::SimpleUnicodeBuffer(size_t size) : SimpleUnicodeBuffer() {
   mBuffer = AllocatorTraits::allocate(mAllocator, size);
   AllocatorTraits::construct(mAllocator, mBuffer);
   mSize = mCapacity = size;
+}
+
+SimpleUnicodeBuffer::SimpleUnicodeBuffer(
+    std::initializer_list<uint32_t> iniList) {
+  mBuffer = AllocatorTraits::allocate(mAllocator, iniList.size());
+  std::uninitialized_copy(std::begin(iniList), std::end(iniList), mBuffer);
 }
 
 uint32_t SimpleUnicodeBuffer::operator[](size_t index) const {
@@ -34,19 +41,12 @@ void SimpleUnicodeBuffer::set(size_t index, uint32_t value) noexcept {
   mBuffer[index] = value;
 }
 
-size_t SimpleUnicodeBuffer::size() const {
-  return mSize;
-}
-
 void SimpleUnicodeBuffer::push_back(const uint32_t value) {
   if (mSize == mCapacity) {
-    if (!mCapacity)
-      ++mCapacity;
+    if (mCapacity == 0) mCapacity = 1;
     mCapacity *= 2;
     auto newBuffer = AllocatorTraits::allocate(mAllocator, mCapacity);
-    for (unsigned i = 0; i < mSize; ++i) {
-      AllocatorTraits::construct(mAllocator, newBuffer + i, *(mBuffer + i));
-    }
+    std::uninitialized_copy(mBuffer, mBuffer + mSize, newBuffer);
     mBuffer = newBuffer;
   }
   AllocatorTraits::construct(mAllocator, mBuffer + mSize, value);

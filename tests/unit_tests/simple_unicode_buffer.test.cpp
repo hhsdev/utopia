@@ -36,3 +36,18 @@ TEST_CASE("push_back works", TAG) {
     REQUIRE(buffer[i] == i);
   }
 }
+
+#ifdef CATCH_CONFIG_ENABLE_BENCHMARKING
+
+void pushBack() {
+  SimpleUnicodeBuffer buffer;
+  for (unsigned i = 0; i < 1000; ++i) {
+    buffer.push_back(i);
+  }
+}
+
+TEST_CASE("Benchmarking", TAG) {
+  SimpleUnicodeBuffer buffer1, buffer2;
+  BENCHMARK("push_back") { return pushBack(); };
+}
+#endif
