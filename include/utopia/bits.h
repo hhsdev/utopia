@@ -11,11 +11,11 @@ template <typename Unsigned>
 std::string toBinary(Unsigned bits);
 
 template <typename Unsigned>
-inline typename std::enable_if<std::is_unsigned_v<Unsigned>, unsigned>::type
+typename std::enable_if<std::is_unsigned_v<Unsigned>, unsigned>::type
 countLeadingOnes(Unsigned bits);
 
 template <typename Unsigned>
-inline typename std::enable_if<std::is_unsigned_v<Unsigned>, unsigned>::type
+typename std::enable_if<std::is_unsigned_v<Unsigned>, unsigned>::type
 countLeadingZeroes(Unsigned bits);
 
 template <typename Buffer, typename Bits>
