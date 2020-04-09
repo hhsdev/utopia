@@ -5,6 +5,27 @@
 #include <type_traits>
 
 namespace utopia {
+// Synopsis
+namespace bits {
+template <typename Unsigned>
+std::string toBinary(Unsigned bits);
+
+template <typename Unsigned>
+inline typename std::enable_if<std::is_unsigned_v<Unsigned>, unsigned>::type
+countLeadingOnes(Unsigned bits);
+
+template <typename Unsigned>
+inline typename std::enable_if<std::is_unsigned_v<Unsigned>, unsigned>::type
+countLeadingZeroes(Unsigned bits);
+
+template <typename Buffer, typename Bits>
+Buffer pack(Buffer buffer, Bits bits, uint8_t sz);
+
+}  // namespace bits
+}  // namespace utopia
+
+namespace utopia {
+// Implementation
 namespace bits {
 
 template <typename Unsigned>
@@ -51,24 +72,6 @@ Buffer pack(Buffer buffer, Bits bits, uint8_t sz) {
   return buffer | bits;
 }
 
-inline bool isLeadingByte(uint8_t byte) {
-  return (byte >> 6) != 0b10;
-}
-
-inline uint8_t numCodeBitsInLeadingByte(uint8_t byte) {
-  if ((byte & 0b1000'0000) == 0)
-    return 7;
-  if ((byte & 0b1110'0000) == 0b1100'0000)
-    return 5;
-  if ((byte & 0b1111'0000) == 0b1110'0000)
-    return 4;
-  if ((byte & 0b1111'1000) == 0b1111'0000)
-    return 3;
-
-  throw std::runtime_error("Should not reach here");
-}
-
 }  // namespace bits
 }  // namespace utopia
-
 #endif
