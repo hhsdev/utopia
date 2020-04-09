@@ -41,21 +41,23 @@ inline uint8_t numCodeBitsInLeadingByte(uint8_t byte) {
 template <typename InputBuffer = std::string,
           typename OutputBuffer = SimpleUnicodeBuffer>
 OutputBuffer utf8ToUtf32(const InputBuffer& input) {
-  using namespace utopia::bits;
+  const auto sz = input.size();
+  if (sz == 0)
+    return OutputBuffer{};
 
-  uint32_t codePoint = 0U;
+  using namespace utopia::bits;
   OutputBuffer output;
 
+  std::size_t endIndex = 0;
   for (unsigned i = 0; i < input.size(); ++i) {
     uint8_t ch = static_cast<uint8_t>(input[i]);
     if (isLeadingByte(ch)) {
+      output.push_back(0U);
+      endIndex = output.size() - 1;
       auto n = numCodeBitsInLeadingByte(ch);
-
-      codePoint = bits::pack(codePoint, uint8_t(ch), n);
-      output.push_back(codePoint);
-      codePoint = 0U;
+      output[endIndex] = bits::pack(output[endIndex], ch, n);
     } else {
-      bits::pack(codePoint, uint8_t(ch & 0b0011'1111), 0);
+      output[endIndex] = bits::pack(output[endIndex], ch, 6);
     }
   }
   return output;
