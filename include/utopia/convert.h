@@ -7,17 +7,17 @@
 #include "utopia/utf_8.h"
 
 namespace utopia {
-namespace core {
+namespace convert {
 
 template <typename InputBuffer = std::string,
           typename OutputBuffer = SimpleUnicodeBuffer>
 OutputBuffer utf8ToUtf32(const InputBuffer& input);
 
-}  // namespace core
+}  // namespace convert
 }  // namespace utopia
 
 namespace utopia {
-namespace core {
+namespace convert {
 
 template <typename InputBuffer = std::string,
           typename OutputBuffer = SimpleUnicodeBuffer>
@@ -45,6 +45,6 @@ OutputBuffer utf8ToUtf32(const InputBuffer& input) {
   return output;
 }
 
-}  // namespace core
+}  // namespace convert
 }  // namespace utopia
 #endif

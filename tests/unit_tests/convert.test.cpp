@@ -1,9 +1,9 @@
 #include <vector>
 #include "catch2/catch.hpp"
-#include "utopia/core.h"
+#include "utopia/convert.h"
 
-using namespace utopia::core;
-constexpr char const* TAG = "[core]";
+using namespace utopia::convert;
+constexpr char const* TAG = "[convert]";
 
 TEST_CASE("converting utf8 to utf32 works", TAG) {
   std::string str = "Hello";

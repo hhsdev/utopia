@@ -5,7 +5,7 @@ add_executable(
   ${PROJECT_SOURCE_DIR}/src/simple_unicode_buffer.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/simple_unicode_buffer.test.cpp
 
-  ${CMAKE_CURRENT_SOURCE_DIR}/core.test.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/convert.test.cpp
   #${PROJECT_SOURCE_DIR}/src/bits.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/bits.test.cpp)
 
