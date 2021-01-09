@@ -7,6 +7,7 @@ endif()
 project(
   utopia
   VERSION 1.0.0
+  DESCRIPTION "utf8 string library in C++"
   LANGUAGES CXX)
 
 include(cmake/StandardProjectSettings.cmake)
