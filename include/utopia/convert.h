@@ -31,6 +31,7 @@ OutputBuffer utf8ToUtf32(const InputBuffer& input) {
   OutputBuffer output;
 
   std::size_t endIndex = 0;
+  constexpr auto NUM_CODE_BITS_IN_TRAILING_BYTE = 6;
   for (unsigned i = 0; i < input.size(); ++i) {
     uint8_t ch = static_cast<uint8_t>(input[i]);
     if (utf8::isLeadingByte(ch)) {
@@ -39,7 +40,8 @@ OutputBuffer utf8ToUtf32(const InputBuffer& input) {
       auto n = utf8::numCodeBitsInLeadingByte(ch);
       output[endIndex] = bits::pack(output[endIndex], ch, n);
     } else {
-      output[endIndex] = bits::pack(output[endIndex], ch, 6);
+      output[endIndex] =
+          bits::pack(output[endIndex], ch, NUM_CODE_BITS_IN_TRAILING_BYTE);
     }
   }
   return output;
