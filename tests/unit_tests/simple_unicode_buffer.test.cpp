@@ -4,7 +4,7 @@
 using namespace utopia;
 constexpr char const* TAG = "[SimpleUnicodeBuffer]";
 
-SimpleUnicodeBuffer createWithPushBack(size_t size) {
+SimpleUnicodeBuffer constructWithPushBack(size_t size) {
   SimpleUnicodeBuffer buffer;
   for (unsigned i = 0; i < size; ++i) {
     buffer.push_back(i);
@@ -35,7 +35,7 @@ TEST_CASE("index operator works", TAG) {
 }
 
 TEST_CASE("push_back works", TAG) {
-  SimpleUnicodeBuffer buffer = createWithPushBack(100);
+  SimpleUnicodeBuffer buffer = constructWithPushBack(100);
 
   for (unsigned i = 0; i < 100; ++i) {
     REQUIRE(buffer[i] == i);
@@ -43,7 +43,7 @@ TEST_CASE("push_back works", TAG) {
 }
 
 TEST_CASE("pop_back works", TAG) {
-  SimpleUnicodeBuffer buffer = createWithPushBack(100);
+  SimpleUnicodeBuffer buffer = constructWithPushBack(100);
 
   auto size = buffer.size();
   for (unsigned i = 0; i < 100; ++i) {
@@ -54,7 +54,7 @@ TEST_CASE("pop_back works", TAG) {
 }
 
 TEST_CASE("remove works", TAG) {
-  SimpleUnicodeBuffer buffer = createWithPushBack(10);
+  SimpleUnicodeBuffer buffer = constructWithPushBack(10);
 
   buffer.remove(2);
   REQUIRE(buffer.size() == 9);
@@ -71,7 +71,7 @@ TEST_CASE("remove works", TAG) {
 }
 
 TEST_CASE("Insert works", TAG) {
-  SimpleUnicodeBuffer buffer = createWithPushBack(5);
+  SimpleUnicodeBuffer buffer = constructWithPushBack(5);
 
   buffer.insert(1, 0xdeadbeef);
   REQUIRE(buffer[0] == 0);
@@ -87,6 +87,6 @@ TEST_CASE("Insert works", TAG) {
 #ifdef CATCH_CONFIG_ENABLE_BENCHMARKING
 
 TEST_CASE("Benchmarking", TAG) {
-  BENCHMARK("push_back") { return createWithPushBack(1000); };
+  BENCHMARK("push_back") { return constructWithPushBack(1000); };
 }
 #endif
